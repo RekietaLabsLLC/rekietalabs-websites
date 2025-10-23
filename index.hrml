@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RekietaLabs Websites — We build fast, beautiful websites</title>
+<meta name="description" content="RekietaLabs Websites — custom websites built fast. Design, code, host." />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ======================
+     Variables + Reset
+     ====================== */
+  :root{
+    --bg:#0b0d10;
+    --panel:#0f1317;
+    --muted:#99a6b2;
+    --brand:#1753aa;
+    --accent1:#36a0ff;
+    --glass: rgba(255,255,255,0.03);
+    --glass-2: rgba(255,255,255,0.02);
+    --radius:14px;
+    --maxw:1200px;
+    --ease:cubic-bezier(.16,.84,.32,1);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(900px 400px at 10% 10%, rgba(23,83,170,0.03), transparent),
+      radial-gradient(700px 300px at 90% 90%, rgba(54,160,255,0.02), transparent),
+      var(--bg);
+    color:#e6eef6;
+    font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.45;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block;height:auto}
+
+  /* ======================
+     Layout
+     ====================== */
+  .container{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  header{
+    position:sticky;top:0;z-index:60;padding:10px 0;
+    background:linear-gradient(180deg, rgba(12,14,17,0.55), rgba(12,14,17,0.2));
+    border-bottom:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(6px)
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo-wrap{display:flex;align-items:center;gap:10px}
+  .logo-box{width:46px;height:46px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.006));display:grid;place-items:center;border:1px solid rgba(255,255,255,0.04)}
+  nav a{margin-left:18px;color:var(--muted);font-weight:600}
+  nav a:hover{color:var(--brand)}
+  .cta{background:var(--brand);color:white;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;box-shadow:0 10px 30px rgba(23,83,170,0.14)}
+  @media (max-width:900px){
+    nav{display:none}
+  }
+
+  /* ======================
+     Hero - animated gradient waves (SVG) + content
+     ====================== */
+  .hero{
+    position:relative;overflow:hidden;padding:64px 0 48px;
+    min-height:74vh;display:grid;align-items:center;
+  }
+  .hero-inner{display:grid;grid-template-columns:1fr 480px;gap:36px;align-items:center;z-index:2;position:relative}
+  @media (max-width:980px){.hero-inner{grid-template-columns:1fr;padding:0}.hero{min-height:72vh}}
+  .hero-copy .eyebrow{color:var(--brand);font-weight:800;font-size:13px;margin-bottom:8px}
+  .hero-title{font-size:clamp(28px,5vw,56px);line-height:1;margin:0;font-weight:900}
+  .hero-sub{color:var(--muted);margin-top:12px;font-size:16px}
+  .hero-ctas{margin-top:20px;display:flex;gap:12px;align-items:center}
+  .cta-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:10px;color:var(--muted)}
+  /* Right mockup card */
+  .mock{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));border-radius:16px;padding:18px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 20px 60px rgba(2,6,12,0.6)
+  }
+
+  /* Waves (SVG background) */
+  .wave-wrap{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0.95}
+  .wave-svg{width:120%;height:100%;transform:translateX(-10%);}
+
+  /* ======================
+     Sections common
+     ====================== */
+  section{padding:68px 0;position:relative}
+  .section-title{display:flex;align-items:end;gap:18px;margin-bottom:10px}
+  .eyebrow{font-size:13px;color:var(--brand);font-weight:700}
+  h2{font-size:clamp(20px,3vw,32px);margin:0}
+  p.lead{color:var(--muted);max-width:760px;margin-top:8px}
+  .glow-divider{height:2px;border-radius:6px;background:linear-gradient(90deg, transparent, rgba(23,83,170,0.9), transparent);margin:18px 0}
+
+  /* ======================
+     Counters (stats)
+     ====================== */
+  .stats{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px}
+  .stat{background:var(--panel);padding:18px;border-radius:12px;min-width:140px;border:1px solid rgba(255,255,255,0.03)}
+  .stat .num{font-weight:900;font-size:20px}
+  .stat .label{color:var(--muted);font-size:13px;margin-top:6px}
+
+  /* ======================
+     Features
+     ====================== */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:980px){.grid-3{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:680px){.hero-inner{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}}
+
+  .feature{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);transition:transform .18s var(--ease)}
+  .feature:hover{transform:translateY(-10px)}
+  .feature .icon{width:56px;height:56;border-radius:10px;display:grid;place-items:center;font-weight:800;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
+
+  /* ======================
+     Portfolio cards
+     ====================== */
+  .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .portfolio-item{border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .18s,box-shadow .18s}
+  .portfolio-item:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(2,6,12,0.6)}
+  .portfolio-thumb{height:180px;background:linear-gradient(135deg,#071428,#07243a);display:grid;place-items:center;font-weight:900;font-size:20px;color:#cfe8ff}
+  .portfolio-body{padding:14px}
+  .portfolio-title{font-weight:800}
+  .portfolio-sub{font-size:13px;color:var(--muted);margin-top:6px}
+
+  /* reflection / mirror effect under portfolio */
+  .mirror{
+    position:relative;margin-top:14px;
+  }
+  .mirror::after{
+    content:"";
+    position:absolute;left:0;right:0;bottom:-18px;height:40px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.003));
+    filter:blur(14px);
+    transform:translateY(8px) scaleY(-1);
+    opacity:0.12;border-radius:8px
+  }
+
+  /* ======================
+     Pricing
+     ====================== */
+  .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .plan{padding:22px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.03)}
+  .plan:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(23,83,170,0.06)}
+  .price{font-size:22px;font-weight:900;margin-top:8px}
+
+  /* reflection below plans */
+  .plan-wrap{position:relative}
+  .plan-wrap::after{
+    content:"";position:absolute;left:12px;right:12px;bottom:-28px;height:50px;background:linear-gradient(180deg, rgba(23,83,170,0.09), rgba(23,83,170,0.01));filter:blur(12px);opacity:0.08;border-radius:12px;transform:scaleY(-1)
+  }
+
+  /* ======================
+     Contact form
+     ====================== */
+  .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+  @media (max-width:980px){.contact-grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  label{font-size:13px;margin-bottom:6px;display:block}
+  input,textarea,select{background:var(--glass-2);border:1px solid rgba(255,255,255,0.03);padding:12px;border-radius:10px;color:#e6eef6;font-size:14px;width:100%}
+  textarea{min-height:140px;resize:vertical}
+  .send{background:var(--brand);color:white;padding:12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;box-shadow:0 10px 30px rgba(23,83,170,0.12)}
+
+  /* ======================
+     Footer + misc
+     ====================== */
+  footer{padding:28px 0;border-top:1px solid rgba(255,255,255,0.03)}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .small{font-size:13px;color:var(--muted)}
+  .scroll-progress{position:fixed;left:0;top:0;height:3px;background:var(--brand);width:0;z-index:90}
+
+  /* lightbox for portfolio detail */
+  .lightbox{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:200;padding:20px}
+  .lightbox.open{display:flex}
+  .lightbox-card{max-width:1000px;width:100%;background:linear-gradient(180deg,#071022,#071828);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
+  .lb-close{position:absolute;right:20px;top:20px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);cursor:pointer}
+
+  /* subtle reveal */
+  .reveal{opacity:0;transform:translateY(14px);transition:all .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* reduce motion preference */
+  @media (prefers-reduced-motion: reduce){
+    .reveal{transition:none!important}
+    .hero-title{transition:none}
+  }
+
+  /* focus outline */
+  :focus{outline:3px solid rgba(23,83,170,0.12);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<header role="banner" aria-label="Main navigation">
+  <div class="container nav">
+    <div class="brand">
+      <div class="logo-wrap" aria-hidden="true">
+        <div class="logo-box">
+          <!-- use your provided logo filename -->
+          <img src="rl-websites-logo.png.png" alt="RekietaLabs Websites logo" style="width:38px;height:38px;object-fit:contain"/>
+        </div>
+        <div>
+          <div style="font-weight:800">RekietaLabs</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Websites — design & build</div>
+        </div>
+      </div>
+    </div>
+
+    <nav role="navigation" aria-label="Primary navigation">
+      <a href="#home">Home</a>
+      <a href="#work">Our Work</a>
+      <a href="#why">Why Us</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div>
+      <button class="cta" id="getStarted">Start Your Project</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero" aria-label="Hero">
+  <!-- animated waves SVG background -->
+  <div class="wave-wrap" aria-hidden="true">
+    <svg class="wave-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#123a6a" stop-opacity="0.65"/>
+          <stop offset="50%" stop-color="#1753aa" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#36a0ff" stop-opacity="0.55"/>
+        </linearGradient>
+        <filter id="blurMe"><feGaussianBlur stdDeviation="14" /></filter>
+      </defs>
+
+      <!-- layered animated waves -->
+      <path id="wave1" d="M0 300 C 320 220 560 380 900 320 C 1150 280 1360 340 1600 300 L1600 0 L0 0 Z" fill="url(#g1)" opacity="0.08" filter="url(#blurMe)">
+        <animate attributeName="d" dur="28s" repeatCount="indefinite"
+          values="
+            M0 300 C 320 220 560 380 900 320 C 1150 280 1360 340 1600 300 L1600 0 L0 0 Z;
+            M0 320 C 320 380 560 260 900 300 C 1150 340 1360 260 1600 320 L1600 0 L0 0 Z;
+            M0 300 C 320 220 560 380 900 320 C 1150 280 1360 340 1600 300 L1600 0 L0 0 Z" />
+      </path>
+
+      <path id="wave2" d="M0 380 C 300 320 620 420 920 340 C 1200 260 1400 380 1600 360 L1600 0 L0 0 Z" fill="url(#g1)" opacity="0.06" filter="url(#blurMe)">
+        <animate attributeName="d" dur="34s" repeatCount="indefinite"
+          values="
+            M0 380 C 300 320 620 420 920 340 C 1200 260 1400 380 1600 360 L1600 0 L0 0 Z;
+            M0 360 C 300 420 620 300 920 380 C 1200 460 1400 320 1600 340 L1600 0 L0 0 Z;
+            M0 380 C 300 320 620 420 920 340 C 1200 260 1400 380 1600 360 L1600 0 L0 0 Z" />
+      </path>
+
+      <rect x="0" y="0" width="100%" height="100%" fill="transparent"/>
+    </svg>
+  </div>
+
+  <div class="container hero-inner">
+    <div class="hero-copy" style="z-index:2">
+      <div class="eyebrow">Custom websites · fast</div>
+      <h1 class="hero-title reveal">We build <span style="background:linear-gradient(90deg,#fff,#cfe9ff);-webkit-background-clip:text;background-clip:text;color:transparent">fast, beautiful</span> and powerful websites.</h1>
+      <p class="hero-sub reveal">Design-first, performance-focused websites that convert. From single-page landing pages to full e-commerce solutions.</p>
+
+      <div class="hero-ctas reveal" style="margin-top:18px">
+        <button class="cta" onclick="scrollToId('contact')">Start Your Project</button>
+        <button class="cta-ghost" onclick="scrollToId('work')">See Our Work</button>
+      </div>
+
+      <!-- stats small -->
+      <div class="stats reveal" style="margin-top:22px">
+        <div class="stat">
+          <div class="num" data-target="152" id="count-websites">0</div>
+          <div class="label">websites built</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-target="86" id="count-clients">0</div>
+          <div class="label">happy clients</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-target="14" id="count-projects">0</div>
+          <div class="label">active projects</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-target="893" id="count-coffee">0</div>
+          <div class="label">cups of coffee</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- mock panel -->
+    <div class="mock reveal" style="z-index:2">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-weight:900">RekietaLabs Example</div>
+          <div style="font-size:12px;color:var(--muted)">Preview</div>
+        </div>
+        <div style="height:12px"></div>
+        <div style="background:linear-gradient(180deg,#071826,#022035);border-radius:12px;padding:12px;color:#cfe8ff">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="width:10px;height:40px;background:var(--brand);border-radius:6px"></div>
+            <div style="font-weight:800">Market • Dark Theme</div>
+          </div>
+          <div style="height:12px"></div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div style="flex:1">
+              <div style="height:92px;border-radius:8px;background:linear-gradient(135deg,#06304a,#05243b);display:grid;place-items:center;font-weight:800">Product grid</div>
+            </div>
+            <div style="width:110px;display:flex;flex-direction:column;gap:8px">
+              <div style="background:rgba(255,255,255,0.02);padding:8px;border-radius:8px;font-size:13px;color:var(--muted)">Fast checkout</div>
+              <div style="background:rgba(255,255,255,0.02);padding:8px;border-radius:8px;font-size:13px;color:var(--muted)">Responsive</div>
+              <div style="background:rgba(255,255,255,0.02);padding:8px;border-radius:8px;font-size:13px;color:var(--muted)">Analytics</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="glow-divider" aria-hidden="true"></div>
+
+<!-- WHY US -->
+<section id="why" aria-labelledby="why-heading">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">Why choose us</div>
+      <h2 id="why-heading">Design + engineering that works</h2>
+    </div>
+    <p class="lead">We combine modern UX design with performance-minded engineering — so your site looks great and performs even better.</p>
+
+    <div style="height:18px"></div>
+
+    <div class="grid-3 reveal">
+      <div class="feature">
+        <div style="display:flex;gap:12px">
+          <div class="icon">⚡</div>
+          <div>
+            <strong>Speed-first</strong>
+            <p class="muted">Optimizations from first paint to TTFB — fast for users and search engines.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div style="display:flex;gap:12px">
+          <div class="icon">🎨</div>
+          <div>
+            <strong>Brand-driven design</strong>
+            <p class="muted">Custom visuals that match your identity, color and typography systems.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div style="display:flex;gap:12px">
+          <div class="icon">🔒</div>
+          <div>
+            <strong>Secure & reliable</strong>
+            <p class="muted">HTTPS, security headers, updates, and reliable hosting options.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="work" aria-labelledby="work-heading">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">Selected projects</div>
+      <h2 id="work-heading">Hand-picked work & mockups</h2>
+    </div>
+    <p class="lead">Three sample projects demonstrating capabilities: marketplaces, accounts, and landing pages.</p>
+
+    <div style="height:18px"></div>
+
+    <div class="portfolio-grid reveal mirror">
+      <!-- Item 1 -->
+      <div class="portfolio-item" tabindex="0" data-title="RekietaLabs Market" data-desc="E-commerce • Product customizations" data-content="A fast, dark-themed marketplace with buy flow optimizations and mobile-first layout.">
+        <div class="portfolio-thumb">Market</div>
+        <div class="portfolio-body">
+          <div class="portfolio-title">RekietaLabs Market</div>
+          <div class="portfolio-sub">E-commerce • Checkout • Custom items</div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="portfolio-item" tabindex="0" data-title="MyLabs Accounts" data-desc="Accounts & dashboard" data-content="User accounts, team dashboards, billing, and analytics integrations.">
+        <div class="portfolio-thumb">Accounts</div>
+        <div class="portfolio-body">
+          <div class="portfolio-title">MyLabs Accounts</div>
+          <div class="portfolio-sub">Auth • Dashboard • Billing</div>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="portfolio-item" tabindex="0" data-title="Landing Pages" data-desc="High-converting landing page" data-content="Fast-loading marketing pages optimized for conversions and performance.">
+        <div class="portfolio-thumb">Landing</div>
+        <div class="portfolio-body">
+          <div class="portfolio-title">Landing Page</div>
+          <div class="portfolio-sub">Marketing • Conversions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-divider" aria-hidden="true"></div>
+
+<!-- PRICING -->
+<section id="pricing" aria-labelledby="pricing-heading">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">Pricing</div>
+      <h2 id="pricing-heading">Simple plans — transparent pricing</h2>
+    </div>
+    <p class="lead">If your project is custom we’ll provide a custom quote — typical timelines: 3–14 days based on scope.</p>
+
+    <div style="height:18px"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px" class="reveal">
+      <div class="plan-wrap">
+        <div class="plan card">
+          <strong>Starter</strong>
+          <div class="muted">For solo projects</div>
+          <div class="price">$499</div>
+          <div style="height:12px"></div>
+          <div class="muted">Up to 3 pages • Mobile responsive • Basic SEO</div>
+          <div style="height:12px"></div>
+          <button class="send" onclick="scrollToId('contact')">Request Quote</button>
+        </div>
+      </div>
+
+      <div class="plan-wrap">
+        <div class="plan card" style="border:1px solid rgba(23,83,170,0.1);box-shadow:0 16px 50px rgba(23,83,170,0.06)">
+          <strong>Professional</strong>
+          <div class="muted">Most popular</div>
+          <div class="price">$1,299</div>
+          <div style="height:12px"></div>
+          <div class="muted">Up to 8 pages • Custom components • Performance audits</div>
+          <div style="height:12px"></div>
+          <button class="send" onclick="scrollToId('contact')">Request Quote</button>
+        </div>
+      </div>
+
+      <div class="plan-wrap">
+        <div class="plan card">
+          <strong>Enterprise</strong>
+          <div class="muted">For larger teams</div>
+          <div class="price">$3,499+</div>
+          <div style="height:12px"></div>
+          <div class="muted">Custom architecture • SSO • Priority support</div>
+          <div style="height:12px"></div>
+          <button class="send" onclick="scrollToId('contact')">Request Quote</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">Let’s build</div>
+      <h2 id="contact-heading">Tell us about your project</h2>
+    </div>
+    <p class="lead">Fill the form below or directly email <strong>support@rekietalabs.com</strong> for the fastest response.</p>
+
+    <div style="height:18px"></div>
+
+    <form class="contact-grid reveal" onsubmit="handleContact(event)" aria-describedby="contact-note" novalidate>
+      <div>
+        <div class="card">
+          <label for="name">Name</label>
+          <input id="name" name="name" required placeholder="Your full name" />
+
+          <div style="height:12px"></div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required placeholder="you@domain.com" />
+
+          <div style="height:12px"></div>
+          <label for="website">Current website (optional)</label>
+          <input id="website" name="website" placeholder="https://example.com" />
+
+          <div style="height:12px"></div>
+          <label for="message">Project details</label>
+          <textarea id="message" name="message" placeholder="Describe what you want, timeline, budget (optional)"></textarea>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <strong>Quick details</strong>
+          <div class="muted" style="margin-top:8px">Provide as much info as you can — if unsure, we'll help scope it.</div>
+
+          <div style="height:12px"></div>
+          <label for="budget">Budget range</label>
+          <select id="budget" name="budget" style="margin-top:6px">
+            <option value="">— select —</option>
+            <option value="under-1k">Under $1k</option>
+            <option value="1k-3k">$1k–$3k</option>
+            <option value="3k-10k">$3k–$10k</option>
+            <option value="10k+">10k+</option>
+          </select>
+
+          <div style="height:14px"></div>
+          <div class="muted">This is front-end only — to contact us, we will prepare an email for you below.</div>
+
+          <div style="height:12px"></div>
+          <button type="submit" class="send">Prepare Email to Support</button>
+        </div>
+      </aside>
+    </form>
+
+    <p id="contact-note" class="muted" style="margin-top:12px">No spam. We'll follow up from <strong>support@rekietalabs.com</strong>. If you prefer, send an email directly.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot-inner">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="logo-box" aria-hidden="true" style="width:40px;height:40px">
+        <img src="rl-websites-logo.png.png" alt="RekietaLabs Websites logo" style="width:34px;height:34px;object-fit:contain"/>
+      </div>
+      <div>
+        <div style="font-weight:800">RekietaLabs</div>
+        <div class="small">Design • Build • Host</div>
+      </div>
+    </div>
+
+    <div class="small">© RekietaLabs 2025 — All rights reserved • <a href="mailto:support@rekietalabs.com">support@rekietalabs.com</a></div>
+  </div>
+</footer>
+
+<!-- Lightbox for portfolio -->
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="lightbox-card" id="lb">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div>
+        <div style="font-weight:900" id="lb-title">Project</div>
+        <div class="muted" id="lb-desc">Short description</div>
+      </div>
+      <div class="lb-close" role="button" tabindex="0" id="lb-close">✕</div>
+    </div>
+    <div id="lb-body" style="color:var(--muted)">Project details...</div>
+  </div>
+</div>
+
+<script>
+/* ===========================
+   Helpers & UI
+   =========================== */
+const scrollToId = id => {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+};
+document.getElementById('getStarted').addEventListener('click', ()=>scrollToId('contact'));
+
+/* Reveal on scroll */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('in');
+  });
+}, {threshold:0.12});
+document.querySelectorAll('.reveal').forEach(n=>io.observe(n));
+
+/* Scroll progress */
+const progress = document.getElementById('scrollProgress');
+window.addEventListener('scroll', ()=>{
+  const h = document.documentElement;
+  const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  progress.style.width = pct + '%';
+}, {passive:true});
+
+/* ===========================
+   Counters - count up when visible
+   =========================== */
+function countUp(el, target, duration=1400){
+  // integer counting; controlled step.
+  const start = 0;
+  const end = parseInt(target, 10);
+  if(isNaN(end)) return;
+  const range = end - start;
+  if(range <= 0){ el.textContent = String(end); return; }
+  const minFrame = 20; // ms per tick
+  const steps = Math.max(12, Math.round(duration / minFrame));
+  let current = start;
+  let step = 0;
+  const increment = range / steps;
+  const id = setInterval(()=>{
+    step++;
+    current = Math.round(start + increment * step);
+    if(step >= steps){
+      el.textContent = String(end);
+      clearInterval(id);
+    } else {
+      el.textContent = String(current);
+    }
+  }, minFrame);
+}
+
+// Observe stats once
+const stats = document.querySelectorAll('.stat .num');
+const statsObserver = new IntersectionObserver((entries, obs)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el = entry.target;
+      const target = el.getAttribute('data-target') || el.textContent;
+      countUp(el, target, 1400);
+      obs.unobserve(el);
+    }
+  });
+}, {threshold:0.4});
+stats.forEach(s=>statsObserver.observe(s));
+
+/* ===========================
+   Portfolio lightbox
+   =========================== */
+const lb = document.getElementById('lightbox');
+const lbTitle = document.getElementById('lb-title');
+const lbDesc = document.getElementById('lb-desc');
+const lbBody = document.getElementById('lb-body');
+const lbClose = document.getElementById('lb-close');
+
+document.querySelectorAll('.portfolio-item').forEach(item=>{
+  item.addEventListener('click', ()=>openLB(item));
+  item.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); openLB(item) }});
+});
+
+function openLB(item){
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden', 'false');
+  lbTitle.textContent = item.dataset.title || 'Project';
+  lbDesc.textContent = item.dataset.desc || '';
+  lbBody.textContent = item.dataset.content || '';
+  lbClose.focus();
+}
+function closeLB(){
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden', 'true');
+}
+lbClose.addEventListener('click', closeLB);
+lb.addEventListener('click', e => { if(e.target === lb) closeLB(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLB(); });
+
+/* ===========================
+   Contact form (front-end only)
+   Prepares an email body and opens mailto link or copies to clipboard
+   =========================== */
+function handleContact(e){
+  e.preventDefault();
+  const form = e.target;
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const website = form.website.value.trim();
+  const message = form.message.value.trim();
+  const budget = form.budget.value || 'Not specified';
+
+  if(!name || !email){
+    alert('Please provide your name and email so we can follow up.');
+    return;
+  }
+
+  const subject = encodeURIComponent('Website inquiry — RekietaLabs');
+  const bodyPlain = [
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Website: ${website || 'N/A'}`,
+    `Budget: ${budget}`,
+    '',
+    'Project details:',
+    message || '(no additional details provided)',
+    '',
+    '---',
+    'Please reply to this email to continue the conversation.'
+  ].join('\n');
+
+  // Try to copy to clipboard for convenience
+  const payload = {
+    name, email, website, budget, message, timestamp: new Date().toISOString()
+  };
+
+  // Prepare mailto URL
+  const mailto = `mailto:support@rekietalabs.com?subject=${subject}&body=${encodeURIComponent(bodyPlain)}`;
+
+  // Prefer opening mail client; also copy plaintext payload for support ticket
+  try {
+    navigator.clipboard.writeText(bodyPlain);
+    // Show a confirm modal-like prompt (using native confirm for simplicity)
+    const goMail = confirm('We prepared an email body and copied it to your clipboard. Click OK to open your email client (mailto) and send it to support@rekietalabs.com. If you prefer, paste the message into your email manually.');
+    if(goMail){
+      window.location.href = mailto;
+    } else {
+      alert('Email body copied to clipboard. Send it to support@rekietalabs.com when you are ready.');
+    }
+    form.reset();
+    scrollToId('home');
+  } catch(err){
+    // Fallback: open mailto and alert about copy failure
+    window.location.href = mailto;
+    alert('Opened your email client. If your clipboard was not available, paste details into the message body.');
+    form.reset();
+  }
+}
+
+/* Accessibility: respect reduced motion */
+(function reduceMotion(){
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(mq.matches){
+    document.querySelectorAll('*').forEach(n=>{
+      n.style.transition = 'none';
+      n.style.animation = 'none';
+    });
+  }
+})();
+
+/* small on-load reveal cascade */
+window.addEventListener('load', ()=>{
+  document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'), i*70));
+});
+</script>
+
+</body>
+</html>
